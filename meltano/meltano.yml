@@ -1,0 +1,69 @@
+version: 1
+default_environment: dev
+project_id: olist-ecommerce-pipeline
+
+environments:
+- name: dev
+- name: prod
+
+plugins:
+  extractors:
+  - name: tap-csv
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+    config:
+      files:
+      - entity: orders
+        path: ../data/raw/olist_orders_dataset.csv
+        keys: [order_id]
+      - entity: order_items
+        path: ../data/raw/olist_order_items_dataset.csv
+        keys: [order_id, order_item_id]
+      - entity: order_payments
+        path: ../data/raw/olist_order_payments_dataset.csv
+        keys: [order_id, payment_sequential]
+      - entity: order_reviews
+        path: ../data/raw/olist_order_reviews_dataset.csv
+        keys: [review_id]
+      - entity: customers
+        path: ../data/raw/olist_customers_dataset.csv
+        keys: [customer_id]
+      - entity: sellers
+        path: ../data/raw/olist_sellers_dataset.csv
+        keys: [seller_id]
+      - entity: products
+        path: ../data/raw/olist_products_dataset.csv
+        keys: [product_id]
+      - entity: geolocation
+        path: ../data/raw/olist_geolocation_dataset.csv
+      - entity: category_translation
+        path: ../data/raw/product_category_name_translation.csv
+        keys: [product_category_name]
+      - entity: marketing_qualified_leads
+        path: ../data/raw/olist_marketing_qualified_leads_dataset.csv
+        keys: [mql_id]
+      - entity: closed_deals
+        path: ../data/raw/olist_closed_deals_dataset.csv
+        keys: [mql_id]
+
+  loaders:
+  # ---- DEV / CI: DuckDB, zero credentials ----
+  - name: target-duckdb
+    variant: jwills
+    pip_url: target-duckdb~=0.6
+    config:
+      filepath: ../data/olist.duckdb
+      default_target_schema: raw
+
+  # ---- PROD: Snowflake, credentials from env ----
+  - name: target-snowflake
+    variant: meltanolabs
+    pip_url: meltanolabs-target-snowflake
+    config:
+      account: ${SNOWFLAKE_ACCOUNT}
+      user: ${SNOWFLAKE_USER}
+      password: ${SNOWFLAKE_PASSWORD}
+      database: ${SNOWFLAKE_DATABASE}
+      warehouse: ${SNOWFLAKE_WAREHOUSE}
+      role: ${SNOWFLAKE_ROLE}
+      default_target_schema: RAW

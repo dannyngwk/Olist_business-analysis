@@ -1,0 +1,41 @@
+# Raw data — too large for git, download from Kaggle (see README)
+data/raw/*.csv
+data/raw/*.zip
+data/*.duckdb
+*.duckdb
+*.duckdb.wal
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.python-version
+
+# Meltano
+meltano/.meltano/
+meltano/plugins/
+.env
+*.env
+
+# dbt
+transform/target/
+transform/dbt_packages/
+transform/logs/
+
+# Dagster
+orchestrator/.dagster/
+tmp*/
+dagster_home/
+
+# Secrets
+*.pem
+*.key
+credentials.json
+.secrets/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
