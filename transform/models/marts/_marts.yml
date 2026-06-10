@@ -1,0 +1,15 @@
+version: 2
+models:
+  - name: fct_orders
+    description: One row per order with revenue, delivery and satisfaction metrics.
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+  - name: dim_customers
+    columns:
+      - name: customer_unique_id
+        tests: [not_null, unique]
+  - name: fct_category_performance
+    columns:
+      - name: category
+        tests: [not_null, unique]

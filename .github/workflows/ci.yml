@@ -1,0 +1,20 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install "dbt-core>=1.9,<1.11" "dbt-duckdb>=1.9,<1.11"
+      - name: dbt deps
+        working-directory: transform
+        run: dbt deps
+      - name: dbt parse (validate models, tests, and lineage compile)
+        working-directory: transform
+        run: dbt parse --target dev
+      - name: Validate Dagster definitions load
+        run: |
+          pip install "dagster>=1.9" "dagster-dbt>=0.25"
+          python -c "from orchestrator.definitions import defs; specs = defs.resolve_all_asset_specs(); print(f'{len(specs)} assets OK')"

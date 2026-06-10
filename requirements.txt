@@ -1,0 +1,20 @@
+# EL
+meltano>=3.7,<4.0
+# Transform
+dbt-core>=1.9,<1.11
+dbt-duckdb>=1.9,<1.11
+dbt-snowflake>=1.9,<1.11
+# Orchestration
+dagster>=1.9
+dagster-webserver>=1.9
+dagster-dbt>=0.25
+# Analysis
+duckdb>=1.1
+pandas>=2.2
+numpy>=2.1
+matplotlib>=3.9
+seaborn>=0.13
+jupyter>=1.1
+# Serving
+streamlit>=1.40
+plotly>=5.24
